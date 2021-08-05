@@ -3,7 +3,7 @@ const router = express.Router()
 const model = require('./model')
 
 router.post('/api/users', (req,res, next) => {
-    model.insert(req.body.id, req.body.bio )
+    model.insert(req.params.id, req.body.bio )
     .then(users => {
         if(users) {
                 res.status(200).json(users)
@@ -51,6 +51,37 @@ router.post('/api/users', (req,res, next) => {
     })
 
 
+        router.delete('/api/users/:id', (req, res, next) => {
+            // difference between body and params
+            model.remove(req.params.id)
+            .then(users => {
+                if(users > 0){
+                    res.status(200).json({ message: "GG"});
+
+                }else {
+                    res.status(404).json({ message: "The user with the specified ID does not exist"});
+
+                }
+            })
+            .catch(err => {
+                res.status(500).json({
+                    message: "The user could not be removed"  
+                })
+            })
+        })
+
+        router.put('/api/users/:id', (req, res, next) => {
+            model.update(req.params.id, req.body)
+            .then(users => {
+                if(users) {
+                    res.status(200).json(users);
+
+                }else {
+
+                }
+            })
+
+        })
 
 
 
